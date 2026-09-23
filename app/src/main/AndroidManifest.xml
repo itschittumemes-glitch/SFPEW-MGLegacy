@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
+    <application
+        android:label="MgLegacy alpha 0.1"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- FCL finds renderer plugins by looking for this -->
+        <meta-data android:name="fclPlugin" android:value="true" />
+
+        <meta-data
+            android:name="renderer"
+            android:value="MgLegacy alpha 0.1:libSimpleFPEWrapper.so:libSimpleFPEWrapper.so" />
+
+        <meta-data
+            android:name="des"
+            android:value="SFPEW/MobileGlues (legacy) - borrows ANGLE" />
+
+        <!-- THE FIX: the official MobileGlues plugin declares these two, and FCL
+             appears to require them to list a renderer for a given MC version.
+             minMCVer=1.0 / no maxMCVer means "offer this renderer for every version". -->
+        <meta-data android:name="minMCVer" android:value="1.0" />
+
+        <!-- Env vars. SFPEW_EGL / LIBGL_EGL / POJAVEXEC_EGL / libSimpleFPEWrapper.so /
+             libmobileglues.so are confirmed strings from Copper's own code.
+             MG_ANGLE_DIR and MG_DIR_PATH are confirmed strings found INSIDE
+             libmobileglues.so itself (not just app code), so the native library
+             really does read them. MG_DIR_PATH is where MobileGlues looks for
+             config.json - the "MgLegacy Settings" screen in this app writes
+             that file there. -->
+        <meta-data
+            android:name="pojavEnv"
+            android:value="LIBGL_ES=3:POJAV_RENDERER=opengles3:POJAVEXEC_EGL=libSimpleFPEWrapper.so:LIBGL_EGL=libSimpleFPEWrapper.so:SFPEW_EGL=libmobileglues.so:MG_ANGLE_DIR=/data/data/com.mine.mglegacy/files/angle:MG_DIR_PATH=/data/data/com.mine.mglegacy/files/mg:MG_COUNT_LAUNCH=1" />
+
+        <meta-data
+            android:name="boatEnv"
+            android:value="LIBGL_ES=3:SFPEW_EGL=libmobileglues.so:MG_ANGLE_DIR=/data/data/com.mine.mglegacy/files/angle:MG_DIR_PATH=/data/data/com.mine.mglegacy/files/mg:MG_COUNT_LAUNCH=1" />
+
+    </application>
+</manifest>
